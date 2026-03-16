@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Animal Guessing Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    
+body{
+    background:#eef2f7;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.game-box{
+    background:white;
+    width:520px;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+h1{
+    text-align:center;
+}
+
+#chat{
+    height:250px;
+    overflow-y:auto;
+    border:1px solid #ddd;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:6px;
+}
+
+.user{
+    color:#2c7be5;
+    margin:6px 0;
+}
+
+.ai{
+    color:#333;
+    margin:6px 0;
+}
+
+input{
+    width:70%;
+    padding:10px;
+}
+
+button{
+    padding:10px 15px;
+    background:#2e7d32;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#256528;
+}
+
+#counter{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="game-box">
+
+<h1>🐘 Animal Guessing Game</h1>
+
+<p id="counter">Questions: 0 / 20</p>
+
+<div id="chat"></div>
+
+<input id="question" placeholder="Ask a yes/no question...">
+<button onclick="sendQuestion()">Ask</button>
+<button onclick="getHint()">Hint</button>
+
+</div>
+
+<script>
+
+let questionCount = 0
+
+async function sendQuestion(){
+
+    let question = document.getElementById("question").value
+
+    if(question === "") return
+
+    let response = await fetch("/game",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            question:question
+        })
+    })
+
+    let data = await response.json()
+
+    document.getElementById("chat").innerHTML +=
+        `<div class="user">You: ${question}</div>`
+
+    document.getElementById("chat").innerHTML +=
+        `<div class="ai">AI: ${data.answer}</div>`
+
+    questionCount = data.count
+
+    document.getElementById("counter").innerText =
+        "Questions: " + questionCount + " / 20"
+
+    document.getElementById("question").value=""
+
+}
+
+async function getHint(){
+
+    let response = await fetch("/hint")
+
+    let data = await response.json()
+
+    document.getElementById("chat").innerHTML +=
+        `<div class="ai">💡 Hint: ${data.hint}</div>`
+
+}
+
+</script>
+
+</body>
+</html>
