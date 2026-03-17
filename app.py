@@ -11,12 +11,12 @@ conversation_history = [
     {
         "role": "system",
         "content": """
-You are running a fun animal guessing game for kids.
+You are running a fun guessing game.
 
 Rules:
-- The player asks yes/no questions.
+- The player gives categories to be quizzed on.
 - Answer briefly.
-- Do NOT reveal the animal unless guessed.
+- Do NOT reveal the answer unless guessed.
 - If the user asks for a hint, give a helpful clue.
 - Keep answers fun and simple.
 """
@@ -74,7 +74,7 @@ def hint():
         messages=conversation_history + [
             {
                 "role": "user",
-                "content": "Give me a helpful hint about the animal but do not reveal it."
+                "content": "Give me a helpful hint but do not the answer."
             }
         ]
     )

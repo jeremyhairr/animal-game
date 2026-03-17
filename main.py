@@ -5,25 +5,25 @@ import os
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def main():
 
-    print("\n🐘 Welcome to the Animal Guessing Game!")
-    print("I am thinking of an animal.")
+    print("Welcome to the Guessing Game!")
+    
     print("Ask up to 20 yes/no questions.")
-    print("You can also guess the animal anytime.\n")
+    print("You can also guess at anytime.")
 
     messages = [
         {
             "role": "system",
             "content": (
-                "You are running a 20 questions game about animals. "
+                "You are running a 20 questions guessing game. "
                 "Choose ONE random animal and remember it for the entire game. "
                 "Only answer questions with 'yes', 'no', or 'maybe'. "
-                "If the player guesses the animal correctly say 'Correct!' "
-                "but do NOT reveal the animal early."
+                "If the player guesses correctly say 'Correct!' "
+                "but do NOT reveal the answer early."
             )
         },
         {
             "role": "user",
-            "content": "Start the game and secretly choose an animal."
+            "content": "Start the game and secretly choose the answer."
         }
     ]
 
@@ -33,7 +33,7 @@ def main():
 
         print(f"\nQuestions remaining: {questions_left}")
 
-        question = input("Ask a question or guess the animal: ")
+        question = input("Ask a question or guess the answer: ")
 
         messages.append({"role": "user", "content": question})
 
@@ -59,11 +59,11 @@ def main():
     reveal = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=messages + [
-            {"role": "user", "content": "Reveal the animal you chose."}
+            {"role": "user", "content": "Reveal the answer you chose."}
         ]
     )
 
-    print("\nThe animal was:")
+    print("\nThe answer was:")
     print(reveal.choices[0].message.content)
 
 
